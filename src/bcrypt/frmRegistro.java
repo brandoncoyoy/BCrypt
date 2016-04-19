@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package bcrypt;
-
+import BLL.Operacion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,18 +16,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 public class frmRegistro extends javax.swing.JFrame {
 
     /**
      * Creates new form frmRegistro
      */
+    Operacion operacion;
     public frmRegistro() {
         initComponents();
         setJTexFieldChanged(txtNombre);
         setJTexFieldChanged(txtClave);
+        operacion = new Operacion();
         setJTexFieldChanged(txtReingreso);
     }
-        private void setJTexFieldChanged(JTextField txt)
+    private void setJTexFieldChanged(JTextField txt)
     {
         DocumentListener documentListener = new DocumentListener() {
  
@@ -70,8 +73,10 @@ public class frmRegistro extends javax.swing.JFrame {
     {
         if(!txtNombre.getText().isEmpty()&&!txtClave.getText().isEmpty()&&!txtReingreso.getText().isEmpty())
         {
-            if(txtClave.getText()==txtReingreso.getText())
+            if(txtClave.getText().equals(txtReingreso.getText()))
+            {
                 btnGuardar.setEnabled(true);
+            }
             else 
                 btnGuardar.setEnabled(false);
         }
@@ -92,12 +97,12 @@ public class frmRegistro extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        txtClave = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JToggleButton();
         jLabel3 = new javax.swing.JLabel();
-        txtReingreso = new javax.swing.JTextField();
+        txtClave = new javax.swing.JPasswordField();
+        txtReingreso = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,6 +125,11 @@ public class frmRegistro extends javax.swing.JFrame {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Reingresar Clave:");
 
@@ -131,22 +141,20 @@ public class frmRegistro extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(18, 69, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtClave, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtReingreso, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-                            .addComponent(txtNombre)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 162, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnGuardar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 237, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtReingreso, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(txtNombre)
+                            .addComponent(txtClave))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -158,8 +166,8 @@ public class frmRegistro extends javax.swing.JFrame {
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -193,11 +201,29 @@ public class frmRegistro extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        if(operacion.AgregarUsuario(txtNombre.getText(), txtClave.getText()))
+        {
+            JOptionPane.showMessageDialog(null, "Registro exitoso");
+            LimpiarCampos();
+        }
+        else
+            JOptionPane.showMessageDialog(null, "Ocurrio un error");
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void LimpiarCampos()
+    {
+        txtNombre.setText("");
+        txtClave.setText("");
+        txtReingreso.setText("");
+    }
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,8 +267,8 @@ public class frmRegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtClave;
+    private javax.swing.JPasswordField txtClave;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtReingreso;
+    private javax.swing.JPasswordField txtReingreso;
     // End of variables declaration//GEN-END:variables
 }
